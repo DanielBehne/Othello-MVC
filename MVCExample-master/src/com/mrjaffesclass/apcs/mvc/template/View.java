@@ -132,6 +132,14 @@ public class View extends javax.swing.JFrame implements MessageHandler {
             g.drawLine((100 * i + 100), i, (100 * i + 100), 800);
         }
 
+        g.fillOval((4 * 100) + 15, (3 * 100) + 15, 70, 70);
+        g.fillOval((3 * 100) + 15, (4 * 100) + 15, 70, 70);
+
+        g2.setColor(Color.white);
+
+        g.fillOval((4 * 100) + 15, (4 * 100) + 15, 70, 70);
+        g.fillOval((3 * 100) + 15, (3 * 100) + 15, 70, 70);
+
 
     }//GEN-LAST:event_startButtonActionPerformed
 
@@ -148,7 +156,7 @@ public class View extends javax.swing.JFrame implements MessageHandler {
         g2.setStroke(new BasicStroke(3));
         g2.setColor(Color.black);
 
-        g.fillOval((x*100)+15, (y*100)+15, 70, 70);
+        g.fillOval((x * 100) + 15, (y * 100) + 15, 70, 70);
     }//GEN-LAST:event_onClick
 
     /**
