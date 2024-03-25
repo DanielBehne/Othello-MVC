@@ -2,11 +2,9 @@ package com.mrjaffesclass.apcs.mvc.template;
 
 import com.mrjaffesclass.apcs.messenger.*;
 import java.awt.Color;
-import javax.swing.JFrame;
-//import javax.swing.JPanel;
-//import java.awt.event.MouseAdapter;
-//import java.awt.event.MouseEvent;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.BasicStroke;
 
 /**
  * MVC Template This is a template of an MVC framework used by APCS for the
@@ -23,6 +21,8 @@ public class View extends javax.swing.JFrame implements MessageHandler {
     public static final int BOARD_SIZE = 8;
     private static final int CELL_SIZE = 100;
 
+    Graphics g;
+
     /**
      * Creates a new view
      *
@@ -31,6 +31,8 @@ public class View extends javax.swing.JFrame implements MessageHandler {
     public View(Messenger messages) {
         mvcMessaging = messages;   // Save the calling controller instance
         initComponents();           // Create and init the GUI components
+        g = panel1.getGraphics();
+        //panel1.paintCompoennts(g);
     }
 
     /**
@@ -38,9 +40,7 @@ public class View extends javax.swing.JFrame implements MessageHandler {
      */
     public void init() {
         // Subscribe to messages here
-        mvcMessaging.subscribe("model:variable1Changed", this);
-        mvcMessaging.subscribe("model:variable2Changed", this);
-        setVisible(true);
+        mvcMessaging.subscribe("testMessage", this);
 
     }
 
@@ -51,11 +51,11 @@ public class View extends javax.swing.JFrame implements MessageHandler {
         } else {
             System.out.println("MSG: received by view: " + messageName + " | No data sent");
         }
-        if (messageName.equals("model:variable1Changed")) {
-            //jLabel8.setText(messagePayload.toString());
-        } else {
-            //jLabel10.setText(messagePayload.toString());      
+
+        if (messagePayload.equals("testMessage")) {
+
         }
+
     }
 
     /**
@@ -68,14 +68,15 @@ public class View extends javax.swing.JFrame implements MessageHandler {
     private void initComponents() {
 
         panel1 = new java.awt.Panel();
+        startButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        panel1.setBackground(new java.awt.Color(204, 204, 204));
+        panel1.setBackground(new java.awt.Color(51, 153, 0));
         panel1.setPreferredSize(new java.awt.Dimension(800, 800));
         panel1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                panel1MouseClicked(evt);
+                onClick(evt);
             }
         });
 
@@ -90,46 +91,65 @@ public class View extends javax.swing.JFrame implements MessageHandler {
             .addGap(0, 800, Short.MAX_VALUE)
         );
 
+        startButton.setText("New Game");
+        startButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                startButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(startButton))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 15, Short.MAX_VALUE)
+                .addComponent(startButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void panel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panel1MouseClicked
+
+    private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
+        // TODO add your handling code here:
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setStroke(new BasicStroke(3));
+        g2.setColor(Color.black);
+        for (int i = 0; i < 7; i++) {
+            g.drawLine(i, (100 * i + 100), 800, (100 * i + 100));
+        }
+        for (int i = 0; i < 7; i++) {
+            g.drawLine((100 * i + 100), i, (100 * i + 100), 800);
+        }
+
+
+    }//GEN-LAST:event_startButtonActionPerformed
+
+    private void onClick(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_onClick
         // TODO add your handling code here:
         int x = evt.getX() / CELL_SIZE;
         int y = evt.getY() / CELL_SIZE;
         String placeX = String.valueOf(x);
         String placeY = String.valueOf(y);
         String place = placeX + placeY;
-        this.mvcMessaging.notify("squareClicked", place);
-    }//GEN-LAST:event_panel1MouseClicked
+        this.mvcMessaging.notify("playerMove", place);
 
-//    @Override
-//    protected void paintComponent(Graphics g) {
-//        super.paintComponent(g);
-//        g.setColor(Color.black);
-//        for (int i = 0; i <= BOARD_SIZE; i++) {
-//            g.drawLine(i * CELL_SIZE, 0, i * CELL_SIZE, BOARD_SIZE * CELL_SIZE);
-//            g.drawLine(0, i * CELL_SIZE, BOARD_SIZE * CELL_SIZE, i * CELL_SIZE);
-//        }
-//    }
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setStroke(new BasicStroke(3));
+        g2.setColor(Color.black);
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame();
-        frame.setSize(600, 600);
-        frame.setBackground(Color.red);
-
-    }
+        g.fillOval((x*100)+15, (y*100)+15, 70, 70);
+    }//GEN-LAST:event_onClick
 
     /**
      * @param args the command line arguments
@@ -137,5 +157,6 @@ public class View extends javax.swing.JFrame implements MessageHandler {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.awt.Panel panel1;
+    private javax.swing.JButton startButton;
     // End of variables declaration//GEN-END:variables
 }
