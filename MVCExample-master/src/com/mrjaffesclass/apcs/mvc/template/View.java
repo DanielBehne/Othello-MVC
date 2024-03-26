@@ -40,7 +40,7 @@ public class View extends javax.swing.JFrame implements MessageHandler {
      */
     public void init() {
         // Subscribe to messages here
-        mvcMessaging.subscribe("testMessage", this);
+        mvcMessaging.subscribe("boardChanged", this);
 
     }
 
@@ -52,8 +52,22 @@ public class View extends javax.swing.JFrame implements MessageHandler {
             System.out.println("MSG: received by view: " + messageName + " | No data sent");
         }
 
-        if (messagePayload.equals("testMessage")) {
-
+        if (messageName.equals("boardChanged")) {
+            String[][] board = (String[][]) messagePayload;
+            for (int w = 0; w < board.length; w++) {
+                for (int i = 0; i < board[0].length; i++) {
+                    if (board[w][i].equals("B")) {
+                        Graphics2D g2 = (Graphics2D) g;
+                        g2.setColor(Color.black);
+                        g.fillOval((w * 100) + 15, (i * 100) + 15, 70, 70);
+                    }
+                    if (board[w][i].equals("W")) {
+                        Graphics2D g2 = (Graphics2D) g;
+                        g2.setColor(Color.white);
+                        g.fillOval((w * 100) + 15, (i * 100) + 15, 70, 70);
+                    }
+                }
+            }
         }
 
     }
@@ -125,6 +139,8 @@ public class View extends javax.swing.JFrame implements MessageHandler {
         Graphics2D g2 = (Graphics2D) g;
         g2.setStroke(new BasicStroke(3));
         g2.setColor(Color.black);
+
+        //draw grid lines
         for (int i = 0; i < 7; i++) {
             g.drawLine(i, (100 * i + 100), 800, (100 * i + 100));
         }
@@ -132,14 +148,12 @@ public class View extends javax.swing.JFrame implements MessageHandler {
             g.drawLine((100 * i + 100), i, (100 * i + 100), 800);
         }
 
+        //place starting 4 pieces
         g.fillOval((4 * 100) + 15, (3 * 100) + 15, 70, 70);
         g.fillOval((3 * 100) + 15, (4 * 100) + 15, 70, 70);
-
         g2.setColor(Color.white);
-
         g.fillOval((4 * 100) + 15, (4 * 100) + 15, 70, 70);
         g.fillOval((3 * 100) + 15, (3 * 100) + 15, 70, 70);
-
 
     }//GEN-LAST:event_startButtonActionPerformed
 
@@ -152,11 +166,10 @@ public class View extends javax.swing.JFrame implements MessageHandler {
         String place = placeX + placeY;
         this.mvcMessaging.notify("playerMove", place);
 
-        Graphics2D g2 = (Graphics2D) g;
-        g2.setStroke(new BasicStroke(3));
-        g2.setColor(Color.black);
-
-        g.fillOval((x * 100) + 15, (y * 100) + 15, 70, 70);
+        //code to place piece needs to move to messageHandler
+//        Graphics2D g2 = (Graphics2D) g;
+//        g2.setColor(Color.black);
+//        g.fillOval((x * 100) + 15, (y * 100) + 15, 70, 70);
     }//GEN-LAST:event_onClick
 
     /**

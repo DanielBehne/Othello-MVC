@@ -15,8 +15,8 @@ public class Model implements MessageHandler {
 
     // Model's data variables
     private String[][] board;
-    private boolean whoseMove;
-    private boolean gameOver;
+    private boolean isBlackMove = true;
+    private boolean gameOver = false;
     private int count = 0;
 
     /**
@@ -28,6 +28,15 @@ public class Model implements MessageHandler {
     public Model(Messenger messages) {
         mvcMessaging = messages;
         this.board = new String[8][8];
+        for (int w = 0; w < board.length; w++) {
+            for (int i = 0; i < board[0].length; i++) {
+                board[w][i] = "";
+            }
+        }
+        board[4][3] = "B";
+        board[3][4] = "B";
+        board[3][3] = "W";
+        board[4][4] = "W";
     }
 
     /**
@@ -35,7 +44,6 @@ public class Model implements MessageHandler {
      */
     public void init() {
         mvcMessaging.subscribe("playerMove", this);
-
     }
 
     @Override
@@ -50,9 +58,17 @@ public class Model implements MessageHandler {
             String position = (String) messagePayload;
             Integer row = new Integer(position.substring(0, 1));
             Integer col = new Integer(position.substring(1, 2));
+            if (this.board[row][col].equals("")) {
+                if (isBlackMove) {
+                    board[row][col] = "B";
+                } else if (!isBlackMove) {
+                    board[row][col] = "W";
+                }
+                isBlackMove = !isBlackMove;
+                this.mvcMessaging.notify("boardChanged", this.board);
+            }
 
-            this.mvcMessaging.notify("testMessage", "33");
         }
-
     }
+
 }
