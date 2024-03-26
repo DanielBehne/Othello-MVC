@@ -64,6 +64,17 @@ public class Model implements MessageHandler {
                 } else if (!isBlackMove) {
                     board[row][col] = "W";
                 }
+
+                //flipPieces here...
+                //check up vert first
+                for (int i = row; i >= 0; i--) {
+                    if (!board[i - 1][col].equals(board[row][col])) {
+                        board[i - 1][col].equals(board[row][col]);
+                    } else {
+                        break;
+                    }
+                }
+
                 isBlackMove = !isBlackMove;
                 this.mvcMessaging.notify("boardChanged", this.board);
             }
