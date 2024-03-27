@@ -64,15 +64,31 @@ public class Model implements MessageHandler {
                 } else if (!isBlackMove) {
                     board[row][col] = "W";
                 }
-
+            
+                if (!board[row][col].equals(board[row][col-1])) {
+                    board[row][col+1] = board[row][col];
+                }
+                
+                
                 //flipPieces here...
                 //check up vert first
-                for (int i = row; i >= 0; i--) {
-                    if (!board[i - 1][col].equals(board[row][col])) {
-                        board[i - 1][col].equals(board[row][col]);
-                    } else {
-                        break;
-                    }
+//                for (int i = row; i >= 0; i--) {
+//                    if (!board[i - 1][col].equals(board[row][col])) {
+//                        board[i - 1][col] = board[row][col];
+//                    } else {
+//                        break;
+//                    }
+//                }
+//                
+//                //check down vert
+//                for (int i = row; i < 8; i++) {
+//                    if (!board[i][col].equals(board[i+1][col])) {
+//                        board[i+1][col] = board[row][col];
+//                    } else {
+//                        break;
+//                    }
+
+                
                 }
 
                 isBlackMove = !isBlackMove;
@@ -82,4 +98,3 @@ public class Model implements MessageHandler {
         }
     }
 
-}
