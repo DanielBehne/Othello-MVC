@@ -58,43 +58,36 @@ public class Model implements MessageHandler {
             String position = (String) messagePayload;
             Integer row = new Integer(position.substring(0, 1));
             Integer col = new Integer(position.substring(1, 2));
-            if (this.board[row][col].equals("")) {
+            if (this.board[row][col].equals("") && isLegalMove(row, col, board)) {
                 if (isBlackMove) {
-                    board[row][col] = "B";
+                    this.board[row][col] = "B";
                 } else if (!isBlackMove) {
-                    board[row][col] = "W";
+                    this.board[row][col] = "W";
                 }
-            
-                if (!board[row][col].equals(board[row][col-1])) {
-                    board[row][col+1] = board[row][col];
-                }
-                
-                
-                //flipPieces here...
-                //check up vert first
-//                for (int i = row; i >= 0; i--) {
-//                    if (!board[i - 1][col].equals(board[row][col])) {
-//                        board[i - 1][col] = board[row][col];
-//                    } else {
-//                        break;
-//                    }
-//                }
+
 //                
-//                //check down vert
-//                for (int i = row; i < 8; i++) {
-//                    if (!board[i][col].equals(board[i+1][col])) {
-//                        board[i+1][col] = board[row][col];
-//                    } else {
-//                        break;
-//                    }
-
-                
-                }
-
-                isBlackMove = !isBlackMove;
-                this.mvcMessaging.notify("boardChanged", this.board);
+                //flipPieces here...
             }
-
         }
+
+        isBlackMove = !isBlackMove;
+        this.mvcMessaging.notify("boardChanged", this.board);
     }
 
+    public boolean isLegalMove(int row, int col, String[][] board) {
+        //boolean[][] legalMoves = new boolean[8][8];
+        String nw = board[row - 1][col - 1];
+        String nn = board[row - 1][col];
+        String ne = board[row - 1][col + 1];
+
+        String ww = board[row][col - 1];
+        String ee = board[row][col + 1];
+
+        String sw = board[row - 1][col - 1];
+        String ss = board[row + 1][col];
+        String se = board[row + 1][col + 1];
+        
+        return true;
+
+    }
+}
