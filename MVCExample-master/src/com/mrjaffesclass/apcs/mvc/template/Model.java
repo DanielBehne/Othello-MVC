@@ -65,29 +65,57 @@ public class Model implements MessageHandler {
                     this.board[row][col] = "W";
                 }
 
-//                
                 //flipPieces here...
+                isBlackMove = !isBlackMove;
+                this.mvcMessaging.notify("boardChanged", this.board);
+            }
+            if (this.board[row][col].equals("") && !isLegalMove(row, col, board)) {
+                this.mvcMessaging.notify("boardChanged", this.board);
             }
         }
-
-        isBlackMove = !isBlackMove;
         this.mvcMessaging.notify("boardChanged", this.board);
+
     }
 
     public boolean isLegalMove(int row, int col, String[][] board) {
         //boolean[][] legalMoves = new boolean[8][8];
-        String nw = board[row - 1][col - 1];
-        String nn = board[row - 1][col];
-        String ne = board[row - 1][col + 1];
 
-        String ww = board[row][col - 1];
-        String ee = board[row][col + 1];
+        String nw = Integer.toString(row - 1) + Integer.toString(col - 1);
+        String nn = Integer.toString(row - 1) + Integer.toString(col);
+        String ne = Integer.toString(row - 1) + Integer.toString(col + 1);
 
-        String sw = board[row - 1][col - 1];
-        String ss = board[row + 1][col];
-        String se = board[row + 1][col + 1];
-        
-        return true;
+        String ww = Integer.toString(row) + Integer.toString(col - 1);
+        String ee = Integer.toString(row) + Integer.toString(col + 1);
+
+        String sw = Integer.toString(row - 1) + Integer.toString(col - 1);
+        String ss = Integer.toString(row + 1) + Integer.toString(col);
+        String se = Integer.toString(row + 1) + Integer.toString(col + 1);
+
+        String[] points = {nn, nw, ne, ww, ee, sw, ss, se};
+
+        if (!board[row][col].equals("")) {
+            return false;
+        }
+
+        for (String direction : points) {
+            Integer testRow = new Integer(direction.substring(0, 1));
+            Integer testCol = new Integer(direction.substring(1, 2));
+
+            String color = "";
+            if (isBlackMove) {
+                color = "B";
+            } else if (!isBlackMove) {
+                color = "W";
+            }
+
+            if (!board[testRow][testCol].equals("")) {
+                if (!board[testRow][testCol].equals(color)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
 
     }
 }
