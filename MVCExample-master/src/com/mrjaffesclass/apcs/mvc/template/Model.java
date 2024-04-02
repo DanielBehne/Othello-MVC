@@ -18,6 +18,7 @@ public class Model implements MessageHandler {
     private boolean isBlackMove = true;
     private boolean gameOver = false;
     private int count = 0;
+    private boolean moveLegal;
 
     /**
      * Model constructor: Create the data representation of the program
@@ -58,7 +59,8 @@ public class Model implements MessageHandler {
             String position = (String) messagePayload;
             Integer row = new Integer(position.substring(0, 1));
             Integer col = new Integer(position.substring(1, 2));
-            if (this.board[row][col].equals("") && isLegalMove(row, col, board)) {
+            isLegalMove(row, col, board);
+            if (this.board[row][col].equals("") && moveLegal) {
                 if (isBlackMove) {
                     this.board[row][col] = "B";
                 } else if (!isBlackMove) {
@@ -69,7 +71,7 @@ public class Model implements MessageHandler {
                 isBlackMove = !isBlackMove;
                 this.mvcMessaging.notify("boardChanged", this.board);
             }
-            if (this.board[row][col].equals("") && !isLegalMove(row, col, board)) {
+            if (this.board[row][col].equals("") && !moveLegal) {
                 this.mvcMessaging.notify("boardChanged", this.board);
             }
         }
@@ -77,8 +79,18 @@ public class Model implements MessageHandler {
 
     }
 
-    public boolean isLegalMove(int row, int col, String[][] board) {
-        //boolean[][] legalMoves = new boolean[8][8];
+    public void isLegalMove(int row, int col, String[][] board) {
+
+        //keep going as long as there is diff color piece until another pice of same color 
+        //for each piece of diff color, go in same direction as vector until finds same color
+        //if meets wall or no other same color piece then return false
+        //might as well change pieces on board if legal move
+        String color = "";
+        if (isBlackMove) {
+            color = "B";
+        } else if (!isBlackMove) {
+            color = "W";
+        }
 
         String nw = Integer.toString(row - 1) + Integer.toString(col - 1);
         String nn = Integer.toString(row - 1) + Integer.toString(col);
@@ -93,29 +105,23 @@ public class Model implements MessageHandler {
 
         String[] points = {nn, nw, ne, ww, ee, sw, ss, se};
 
-        if (!board[row][col].equals("")) {
-            return false;
-        }
-
         for (String direction : points) {
             Integer testRow = new Integer(direction.substring(0, 1));
             Integer testCol = new Integer(direction.substring(1, 2));
 
-            String color = "";
-            if (isBlackMove) {
-                color = "B";
-            } else if (!isBlackMove) {
-                color = "W";
-            }
-
             if (!board[testRow][testCol].equals("")) {
                 if (!board[testRow][testCol].equals(color)) {
-                    return true;
+                    isLegalMove(testRow, testCol, board);
+                }
+
+                if (board[testRow][testCol].equals(color)) {
+                    moveLegal = true;
+                    break;
+                    //flip in between pieces here...
                 }
             }
         }
 
-        return false;
 
     }
 }
