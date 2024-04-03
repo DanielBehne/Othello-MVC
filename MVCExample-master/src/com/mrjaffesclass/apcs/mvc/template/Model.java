@@ -59,7 +59,7 @@ public class Model implements MessageHandler {
             String position = (String) messagePayload;
             Integer row = new Integer(position.substring(0, 1));
             Integer col = new Integer(position.substring(1, 2));
-            isLegalMove(row, col, board);
+            legalMovePt1(row, col, board);
             if (this.board[row][col].equals("") && moveLegal) {
                 if (isBlackMove) {
                     this.board[row][col] = "B";
@@ -79,17 +79,12 @@ public class Model implements MessageHandler {
 
     }
 
-    public void isLegalMove(int row, int col, String[][] board) {
-
-        //keep going as long as there is diff color piece until another pice of same color 
-        //for each piece of diff color, go in same direction as vector until finds same color
-        //if meets wall or no other same color piece then return false
-        //might as well change pieces on board if legal move
-        String color = "";
+    public void legalMovePt1(int row, int col, String[][] board) {
+        String playerColor = "";
         if (isBlackMove) {
-            color = "B";
+            playerColor = "B";
         } else if (!isBlackMove) {
-            color = "W";
+            playerColor = "W";
         }
 
         String nw = Integer.toString(row - 1) + Integer.toString(col - 1);
@@ -108,20 +103,33 @@ public class Model implements MessageHandler {
         for (String direction : points) {
             Integer testRow = new Integer(direction.substring(0, 1));
             Integer testCol = new Integer(direction.substring(1, 2));
-
             if (!board[testRow][testCol].equals("")) {
-                if (!board[testRow][testCol].equals(color)) {
-                    isLegalMove(testRow, testCol, board);
-                }
-
-                if (board[testRow][testCol].equals(color)) {
-                    moveLegal = true;
-                    break;
-                    //flip in between pieces here...
-                }
+                isLegalMove(testRow, testCol, board, direction, playerColor);
+//                if (!board[testRow][testCol].equals(color)) {
+//                    isLegalMove(testRow, testCol, board, direction);
+//                } else if (board[testRow][testCol].equals(color)) {
+//                    moveLegal = true;
+//                    break;
+//                    //flip in between pieces here...
+//                } else {
+//                    moveLegal = false;
+//                }
+            }
+            if (moveLegal = true) {
+                break;
             }
         }
+    }
 
-
+    public void isLegalMove(int row, int col, String[][] board, String vector, String color) {
+        if (!board[row][col].equals(color) && !board[row][col].equals("")) {
+            isLegalMove(row, col, board, vector, color);
+        } else if (board[row][col].equals(color)) {
+            moveLegal = true;
+            //break;
+            //flip in between pieces here...
+        } else {
+            moveLegal = false;
+        }
     }
 }
