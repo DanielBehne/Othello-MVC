@@ -80,51 +80,67 @@ public class Model implements MessageHandler {
     }
 
     public void legalMovePt1(int row, int col, String[][] board) {
-        String playerColor = "";
-        if (isBlackMove) {
-            playerColor = "B";
-        } else if (!isBlackMove) {
-            playerColor = "W";
-        }
+        String playerColor = isBlackMove ? "B" : (!isBlackMove ? "W" : "");
 
-        String nw = Integer.toString(row - 1) + Integer.toString(col - 1);
-        String nn = Integer.toString(row - 1) + Integer.toString(col);
-        String ne = Integer.toString(row - 1) + Integer.toString(col + 1);
+        int[][] vectors = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
 
-        String ww = Integer.toString(row) + Integer.toString(col - 1);
-        String ee = Integer.toString(row) + Integer.toString(col + 1);
-
-        String sw = Integer.toString(row - 1) + Integer.toString(col - 1);
-        String ss = Integer.toString(row + 1) + Integer.toString(col);
-        String se = Integer.toString(row + 1) + Integer.toString(col + 1);
-
-        String[] points = {nn, nw, ne, ww, ee, sw, ss, se};
-
-        for (String direction : points) {
-            Integer testRow = new Integer(direction.substring(0, 1));
-            Integer testCol = new Integer(direction.substring(1, 2));
-            if (!board[testRow][testCol].equals("")) {
+        for (int[] direction : vectors) {
+            int testRow = row + direction[0];
+            int testCol = col + direction[1];
+            if (isValidPosition(testRow, testRow, board.length) && !board[testRow][testCol].equals("") && !board[testRow][testCol].equals(playerColor)) {
                 isLegalMove(testRow, testCol, board, direction, playerColor);
 //                if (!board[testRow][testCol].equals(color)) {
 //                    isLegalMove(testRow, testCol, board, direction);
-//                } else if (board[testRow][testCol].equals(color)) {
-//                    moveLegal = true;
-//                    break;
+
+                //first iteration
+            } else if (isValidPosition(testRow, testCol, board.length) && board[testRow][testCol].equals(playerColor)) {
+                moveLegal = false;
+                break;
 //                    //flip in between pieces here...
 //                } else {
 //                    moveLegal = false;
 //                }
             }
-            if (moveLegal = true) {
+            if (moveLegal) {
                 break;
             }
         }
     }
 
-    public void isLegalMove(int row, int col, String[][] board, String vector, String color) {
-        if (!board[row][col].equals(color) && !board[row][col].equals("")) {
-            isLegalMove(row, col, board, vector, color);
-        } else if (board[row][col].equals(color)) {
+    public void isLegalMove(int row, int col, String[][] board, int[] vector, String color) {
+        while (isValidPosition(row, col, board.length) && !board[row][col].equals(color) && !board[row][col].equals("")) {
+
+            if (vector[0] == -1 && vector[1] == 0) {
+                row--;
+            }
+            if (vector[0] == 1 && vector[1] == 0) {
+                row++;
+            }
+            if (vector[1] == -1 && vector[0] == 0) {
+                col--;
+            }
+            if (vector[1] == 1 && vector[0] == 0) {
+                col++;
+            }
+            if (vector[0] == -1 && vector[1] == -1) {
+                row--;
+                col--;
+            }
+            if (vector[0] == 1 && vector[1] == 1) {
+                row++;
+                col++;
+            }
+            if (vector[0] == 1 && vector[1] == -1) {
+                row++;
+                col--;
+            }
+            if (vector[0] == -1 && vector[1] == +1) {
+                row--;
+                col++;
+            }
+        }
+
+        if (isValidPosition(row, col, board.length) && board[row][col].equals(color)) {
             moveLegal = true;
             //break;
             //flip in between pieces here...
@@ -132,4 +148,12 @@ public class Model implements MessageHandler {
             moveLegal = false;
         }
     }
+
+    public boolean isValidPosition(int row, int col, int boardSize) {
+        if (row >= 0 && row < boardSize && col >= 0 && col < boardSize) {
+            return true;
+        }
+        return false;
+    }
+
 }
