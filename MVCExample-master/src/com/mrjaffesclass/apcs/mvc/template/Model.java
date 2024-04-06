@@ -56,96 +56,67 @@ public class Model implements MessageHandler {
         }
 
         if (messageName.equals("playerMove") && this.gameOver == false) {
-            //moveLegal = false;
             String position = (String) messagePayload;
             Integer row = new Integer(position.substring(0, 1));
             Integer col = new Integer(position.substring(1, 2));
-            //legalMovePt1(row, col, board);
-            boolean isLegalMove = legalMovePt1(row,col,board);
+            String playerColor = isBlackMove ? "B" : (!isBlackMove ? "W" : "");
+            boolean checkAll = checkAll(playerColor, board);
+            if (!checkAll) {
+                isBlackMove = !isBlackMove;
+                this.mvcMessaging.notify("noMoves", this.board);
+            }
+            boolean isLegalMove = legalMove(row, col, board, playerColor);
             if (this.board[row][col].equals("") && isLegalMove) {
                 if (isBlackMove) {
                     this.board[row][col] = "B";
                 } else if (!isBlackMove) {
                     this.board[row][col] = "W";
                 }
-
+                flipPieces(board);
                 isBlackMove = !isBlackMove;
                 this.mvcMessaging.notify("boardChanged", this.board);
             }
-//            if (this.board[row][col].equals("") && !isLegalMove) {
-//                this.mvcMessaging.notify("boardChanged", this.board);
-//            }
+
         }
-        //this.mvcMessaging.notify("boardChanged", this.board);
 
     }
 
-    public boolean legalMovePt1(int row, int col, String[][] board) {
-        String playerColor = isBlackMove ? "B" : (!isBlackMove ? "W" : "");
+    public boolean legalMove(int row, int col, String[][] board, String playerColor) {
+        //String playerColor = isBlackMove ? "B" : (!isBlackMove ? "W" : "");
 
         int[][] vectors = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
 
         if (!board[row][col].equals("")) {
-            //moveLegal = false;
             return false;
         }
-        
+
         for (int[] direction : vectors) {
             int x = direction[0];
             int y = direction[1];
             int testX = row + x;
             int testY = col + y;
-            
+
             while (isValidPosition(testX, testY, board.length) && !board[testX][testY].equals(playerColor)) {
                 testX += x;
                 testY += y;
             }
-            
+
             if (isValidPosition(testX, testY, board.length) && board[testX][testY].equals(playerColor)) {
                 testX -= x;
                 testY -= y;
                 while (testX != row || testY != col) {
                     if (!board[testX][testY].equals(playerColor) && !board[testX][testY].equals("")) {
+                        //* only flips the piece where the vector checked, not all directions *//
+                        //board[testX][testY] = playerColor;
                         return true;
                     }
                     testX -= x;
                     testY -= y;
                 }
-            } 
+            }
         }
         return false;
-        
-        
-        
-//        for (int[] direction : vectors) {
-//            int testRow = row + direction[0];
-//            int testCol = col + direction[1];
-//            if (isValidPosition(testRow, testCol, board.length) && !board[testRow][testCol].equals("") && !board[testRow][testCol].equals(playerColor)) {
-//                isLegalMove(testRow, testCol, board, direction, playerColor);
-//            }
-//
-//            if (moveLegal) {
-//                break;
-//            }
-//        }
     }
-
-//    public void isLegalMove(int row, int col, String[][] board, int[] vector, String color) {
-//        //int tempRow = row + vector[0];
-//        //int tempCol = col + vector[1];
-//        while (isValidPosition(row, col, board.length) && !board[row][col].equals(color) && !board[row][col].equals("")) {
-//            row += vector[0];
-//            row += vector[1];
-//        }
-//
-//        if (isValidPosition(row, col, board.length) && board[row][col].equals(color)) {
-//            moveLegal = true;
-//
-//            //flip in between pieces here...
-//        } else {
-//            moveLegal = false;
-//        }
-//    }
 
     public boolean isValidPosition(int row, int col, int boardSize) {
         if (row >= 0 && row < boardSize && col >= 0 && col < boardSize) {
@@ -154,8 +125,25 @@ public class Model implements MessageHandler {
         return false;
     }
 
-    public void flipDisks(int startRow, int startCol, int finalRow, int finalCol, String[][] board, String color) {
+    public void flipPieces(String[][] board) {
 
+    }
+
+    //checks all positions to see if there's a legal move
+    public boolean checkAll(String color, String[][] board) {
+        int legalMoveCount = 0;
+        for (int r = 0; r < board.length; r++) {
+            for (int c = 0; c < board[0].length; c++) {
+                boolean isLegalAll = legalMove(r, c, board, color);
+                if (isLegalAll) {
+                    legalMoveCount++;
+                }
+            }
+        }
+        if (legalMoveCount == 0) {
+            return false;
+        }
+        return true;
     }
 
 }

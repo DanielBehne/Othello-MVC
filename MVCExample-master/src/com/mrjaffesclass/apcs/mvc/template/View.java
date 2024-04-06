@@ -41,6 +41,7 @@ public class View extends javax.swing.JFrame implements MessageHandler {
     public void init() {
         // Subscribe to messages here
         mvcMessaging.subscribe("boardChanged", this);
+        mvcMessaging.subscribe("noMoves", this);
 
     }
 
@@ -68,6 +69,10 @@ public class View extends javax.swing.JFrame implements MessageHandler {
                     }
                 }
             }
+        }
+
+        if (messageName.equals("noMoves")) {
+            this.mvcMessaging.notify("playerMove", this);
         }
 
     }
