@@ -67,6 +67,7 @@ public class Model implements MessageHandler {
             }
             boolean isLegalMove = legalMove(row, col, board, playerColor);
             if (this.board[row][col].equals("") && isLegalMove) {
+                flipPieces(row, col, board, playerColor);
                 if (isBlackMove) {
                     this.board[row][col] = "B";
                 } else if (!isBlackMove) {
@@ -81,7 +82,7 @@ public class Model implements MessageHandler {
     }
 
     public boolean legalMove(int row, int col, String[][] board, String playerColor) {
-        boolean legal = false;
+        //boolean legal = false;
 
         int[][] vectors = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
 
@@ -107,20 +108,45 @@ public class Model implements MessageHandler {
                     if (!board[testX][testY].equals(playerColor) && !board[testX][testY].equals("")) {
                         //source of error
                         //board[testX][testY] = playerColor;
-                        legal = true;
+                        return true;
                     }
                     testX -= x;
                     testY -= y;
                 }
             }
         }
-        if (legal) {
-//            for (int[] direction : vectors) {
-//            }
 
-            return true;
-        }
         return false;
+
+    }
+
+    public void flipPieces(int row, int col, String[][] board, String playerColor) {
+        int[][] vectors = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
+
+        for (int[] direction : vectors) {
+            int x = direction[0];
+            int y = direction[1];
+            int testX = row + x;
+            int testY = col + y;
+
+            while (isValidPosition(testX, testY, board.length) && !board[testX][testY].equals(playerColor) && !board[testX][testY].equals("")) {
+                testX += x;
+                testY += y;
+            }
+
+            if (isValidPosition(testX, testY, board.length) && board[testX][testY].equals(playerColor)) {
+                testX -= x;
+                testY -= y;
+                while (testX != row || testY != col) {
+                    if (!board[testX][testY].equals(playerColor) && !board[testX][testY].equals("")) {
+                        board[testX][testY] = playerColor;
+                    }
+                    testX -= x;
+                    testY -= y;
+                }
+            }
+        }
+
     }
 
     //prevents out of bounds error
