@@ -72,7 +72,6 @@ public class Model implements MessageHandler {
                 } else if (!isBlackMove) {
                     this.board[row][col] = "W";
                 }
-                flipPieces(board);
                 isBlackMove = !isBlackMove;
                 this.mvcMessaging.notify("boardChanged", this.board);
             }
@@ -82,7 +81,7 @@ public class Model implements MessageHandler {
     }
 
     public boolean legalMove(int row, int col, String[][] board, String playerColor) {
-        //String playerColor = isBlackMove ? "B" : (!isBlackMove ? "W" : "");
+        boolean legal = false;
 
         int[][] vectors = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
 
@@ -96,7 +95,7 @@ public class Model implements MessageHandler {
             int testX = row + x;
             int testY = col + y;
 
-            while (isValidPosition(testX, testY, board.length) && !board[testX][testY].equals(playerColor)) {
+            while (isValidPosition(testX, testY, board.length) && !board[testX][testY].equals(playerColor) && !board[testX][testY].equals("")) {
                 testX += x;
                 testY += y;
             }
@@ -106,27 +105,30 @@ public class Model implements MessageHandler {
                 testY -= y;
                 while (testX != row || testY != col) {
                     if (!board[testX][testY].equals(playerColor) && !board[testX][testY].equals("")) {
-                        //* only flips the piece where the vector checked, not all directions *//
+                        //source of error
                         //board[testX][testY] = playerColor;
-                        return true;
+                        legal = true;
                     }
                     testX -= x;
                     testY -= y;
                 }
             }
         }
-        return false;
-    }
+        if (legal) {
+//            for (int[] direction : vectors) {
+//            }
 
-    public boolean isValidPosition(int row, int col, int boardSize) {
-        if (row >= 0 && row < boardSize && col >= 0 && col < boardSize) {
             return true;
         }
         return false;
     }
 
-    public void flipPieces(String[][] board) {
-
+    //prevents out of bounds error
+    public boolean isValidPosition(int row, int col, int boardSize) {
+        if (row >= 0 && row < boardSize && col >= 0 && col < boardSize) {
+            return true;
+        }
+        return false;
     }
 
     //checks all positions to see if there's a legal move
