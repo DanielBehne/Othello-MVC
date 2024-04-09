@@ -45,6 +45,7 @@ public class Model implements MessageHandler {
      */
     public void init() {
         mvcMessaging.subscribe("playerMove", this);
+        mvcMessaging.subscribe("newGame", this);
     }
 
     @Override
@@ -77,6 +78,22 @@ public class Model implements MessageHandler {
                 this.mvcMessaging.notify("boardChanged", this.board);
             }
 
+        }
+
+        if (messageName.equals("newGame")) {
+            for (int w = 0; w < board.length; w++) {
+                for (int i = 0; i < board[0].length; i++) {
+                    this.board[w][i] = "";
+                }
+            }
+            this.board[4][3] = "B";
+            this.board[3][4] = "B";
+            this.board[3][3] = "W";
+            this.board[4][4] = "W";
+            
+            isBlackMove = true;
+            
+            this.mvcMessaging.notify("boardChanged", this.board);
         }
 
     }

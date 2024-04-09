@@ -42,7 +42,7 @@ public class View extends javax.swing.JFrame implements MessageHandler {
         // Subscribe to messages here
         mvcMessaging.subscribe("boardChanged", this);
         mvcMessaging.subscribe("noMoves", this);
-
+ 
     }
 
     @Override
@@ -88,6 +88,7 @@ public class View extends javax.swing.JFrame implements MessageHandler {
 
         panel1 = new java.awt.Panel();
         startButton = new javax.swing.JButton();
+        newGameButton = new java.awt.Button();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -109,10 +110,18 @@ public class View extends javax.swing.JFrame implements MessageHandler {
             .addGap(0, 800, Short.MAX_VALUE)
         );
 
-        startButton.setText("New Game");
+        startButton.setText("Start Game");
         startButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 startButtonActionPerformed(evt);
+            }
+        });
+
+        newGameButton.setLabel("button1");
+        newGameButton.setName("New Game"); // NOI18N
+        newGameButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newGameButtonActionPerformed(evt);
             }
         });
 
@@ -123,13 +132,17 @@ public class View extends javax.swing.JFrame implements MessageHandler {
             .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(startButton))
+                .addComponent(startButton)
+                .addGap(110, 110, 110)
+                .addComponent(newGameButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 15, Short.MAX_VALUE)
-                .addComponent(startButton)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(startButton, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(newGameButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -176,12 +189,20 @@ public class View extends javax.swing.JFrame implements MessageHandler {
 //        g.fillOval((x * 100) + 15, (y * 100) + 15, 70, 70);
     }//GEN-LAST:event_onClick
 
+    private void newGameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newGameButtonActionPerformed
+        // TODO add your handling code here:
+        this.mvcMessaging.notify("newGame",this);
+    }//GEN-LAST:event_newGameButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private java.awt.Button newGameButton;
     private java.awt.Panel panel1;
     private javax.swing.JButton startButton;
     // End of variables declaration//GEN-END:variables
+    
+    
 }
