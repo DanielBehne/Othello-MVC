@@ -43,6 +43,8 @@ public class View extends javax.swing.JFrame implements MessageHandler {
         // Subscribe to messages here
         mvcMessaging.subscribe("boardChanged", this);
         mvcMessaging.subscribe("noMoves", this);
+        mvcMessaging.subscribe("blackPieces", this);
+        mvcMessaging.subscribe("whitePieces", this);
 
     }
 
@@ -76,6 +78,16 @@ public class View extends javax.swing.JFrame implements MessageHandler {
             this.mvcMessaging.notify("playerMove", this);
         }
 
+        if (messageName.equals("blackPieces")) {
+            String b = messagePayload.toString();
+            blackNum.setText(b);
+        }
+        
+        if (messageName.equals("whitePieces")) {
+            String w = messagePayload.toString();
+            whiteNum.setText(w);
+        }
+
     }
 
     /**
@@ -90,6 +102,10 @@ public class View extends javax.swing.JFrame implements MessageHandler {
         panel1 = new java.awt.Panel();
         startButton = new javax.swing.JButton();
         newGameButton = new javax.swing.JButton();
+        blackLabel = new javax.swing.JLabel();
+        blackNum = new javax.swing.JLabel();
+        whiteLabel = new javax.swing.JLabel();
+        whiteNum = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -108,7 +124,7 @@ public class View extends javax.swing.JFrame implements MessageHandler {
         );
         panel1Layout.setVerticalGroup(
             panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 800, Short.MAX_VALUE)
+            .addGap(0, 819, Short.MAX_VALUE)
         );
 
         startButton.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -127,24 +143,45 @@ public class View extends javax.swing.JFrame implements MessageHandler {
             }
         });
 
+        blackLabel.setText("Black:");
+
+        whiteLabel.setText("White:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(blackLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(blackNum)
+                .addGap(114, 114, 114)
+                .addComponent(whiteLabel)
+                .addGap(18, 18, 18)
+                .addComponent(whiteNum)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(startButton)
-                .addGap(122, 122, 122)
-                .addComponent(newGameButton))
+                .addGap(32, 32, 32)
+                .addComponent(newGameButton)
+                .addGap(39, 39, 39))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 6, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(startButton)
-                    .addComponent(newGameButton))
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(startButton)
+                        .addComponent(newGameButton))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(blackLabel)
+                        .addComponent(blackNum)
+                        .addComponent(whiteLabel)
+                        .addComponent(whiteNum)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -223,9 +260,13 @@ public class View extends javax.swing.JFrame implements MessageHandler {
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel blackLabel;
+    private javax.swing.JLabel blackNum;
     private javax.swing.JButton newGameButton;
     private java.awt.Panel panel1;
     private javax.swing.JButton startButton;
+    private javax.swing.JLabel whiteLabel;
+    private javax.swing.JLabel whiteNum;
     // End of variables declaration//GEN-END:variables
 
 }

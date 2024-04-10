@@ -19,6 +19,8 @@ public class Model implements MessageHandler {
     private boolean gameOver = false;
     private int count = 0;
     private boolean moveLegal;
+    private int blackCount;
+    private int whiteCount;
 
     /**
      * Model constructor: Create the data representation of the program
@@ -75,7 +77,10 @@ public class Model implements MessageHandler {
                     this.board[row][col] = "W";
                 }
                 isBlackMove = !isBlackMove;
+                //countPieces(board);
                 this.mvcMessaging.notify("boardChanged", this.board);
+                this.mvcMessaging.notify("blackPieces", this.blackCount);
+                this.mvcMessaging.notify("whitePieces", this.whiteCount);
             }
 
         }
@@ -90,9 +95,9 @@ public class Model implements MessageHandler {
             this.board[3][4] = "B";
             this.board[3][3] = "W";
             this.board[4][4] = "W";
-            
+
             isBlackMove = true;
-            
+
             //this.mvcMessaging.notify("boardChanged", this.board);
         }
 
@@ -163,6 +168,7 @@ public class Model implements MessageHandler {
                 }
             }
         }
+        countPieces(board);
 
     }
 
@@ -189,6 +195,21 @@ public class Model implements MessageHandler {
             return false;
         }
         return true;
+    }
+
+    public void countPieces(String[][] board) {
+        blackCount = 0;
+        whiteCount = 0;
+        for (int r = 0; r < board.length; r++) {
+            for (int c = 0; c < board[0].length; c++) {
+                if (this.board[r][c].equals("B")) {
+                    blackCount++;
+                }
+                if (this.board[r][c].equals("W")) {
+                    whiteCount++;
+                }
+            }
+        }
     }
 
 }
