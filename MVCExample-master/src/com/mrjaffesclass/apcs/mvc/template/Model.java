@@ -14,13 +14,9 @@ public class Model implements MessageHandler {
     private final Messenger mvcMessaging;
 
     // Model's data variables
-    private String[][] board;
+    private final String[][] board;
     private boolean isBlackMove = true;
     private boolean gameOver = false;
-    private int count = 0;
-    private boolean moveLegal;
-    private int blackCount;
-    private int whiteCount;
 
     /**
      * Model constructor: Create the data representation of the program
@@ -77,10 +73,13 @@ public class Model implements MessageHandler {
                     this.board[row][col] = "W";
                 }
                 isBlackMove = !isBlackMove;
-                //countPieces(board);
+
+                int blackCount = blackPieces(board);
+                int whiteCount = whitePieces(board);
+
                 this.mvcMessaging.notify("boardChanged", this.board);
-                this.mvcMessaging.notify("blackPieces", this.blackCount);
-                this.mvcMessaging.notify("whitePieces", this.whiteCount);
+                this.mvcMessaging.notify("blackPieces", blackCount);
+                this.mvcMessaging.notify("whitePieces", whiteCount);
             }
 
         }
@@ -97,8 +96,6 @@ public class Model implements MessageHandler {
             this.board[4][4] = "W";
 
             isBlackMove = true;
-
-            //this.mvcMessaging.notify("boardChanged", this.board);
         }
 
     }
@@ -168,8 +165,6 @@ public class Model implements MessageHandler {
                 }
             }
         }
-        countPieces(board);
-
     }
 
     //prevents out of bounds error
@@ -197,19 +192,27 @@ public class Model implements MessageHandler {
         return true;
     }
 
-    public void countPieces(String[][] board) {
-        blackCount = 0;
-        whiteCount = 0;
+    public int blackPieces(String[][] board) {
+        int blackCount = 0;
         for (int r = 0; r < board.length; r++) {
             for (int c = 0; c < board[0].length; c++) {
                 if (this.board[r][c].equals("B")) {
                     blackCount++;
                 }
+            }
+        }
+        return blackCount;
+    }
+    public int whitePieces(String[][] board) {
+        int whiteCount = 0;
+        for (int r = 0; r < board.length; r++) {
+            for (int c = 0; c < board[0].length; c++) {
                 if (this.board[r][c].equals("W")) {
                     whiteCount++;
                 }
             }
         }
+        return whiteCount;
     }
 
 }
