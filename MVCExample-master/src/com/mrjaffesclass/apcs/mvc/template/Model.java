@@ -93,7 +93,7 @@ public class Model implements MessageHandler {
             
             isBlackMove = true;
             
-            this.mvcMessaging.notify("boardChanged", this.board);
+            //this.mvcMessaging.notify("boardChanged", this.board);
         }
 
     }

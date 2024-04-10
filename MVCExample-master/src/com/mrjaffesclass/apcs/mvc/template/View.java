@@ -32,7 +32,8 @@ public class View extends javax.swing.JFrame implements MessageHandler {
         mvcMessaging = messages;   // Save the calling controller instance
         initComponents();           // Create and init the GUI components
         g = panel1.getGraphics();
-        //panel1.paintCompoennts(g);
+        //panel1.paintComponents(g);
+
     }
 
     /**
@@ -42,7 +43,7 @@ public class View extends javax.swing.JFrame implements MessageHandler {
         // Subscribe to messages here
         mvcMessaging.subscribe("boardChanged", this);
         mvcMessaging.subscribe("noMoves", this);
- 
+
     }
 
     @Override
@@ -88,7 +89,7 @@ public class View extends javax.swing.JFrame implements MessageHandler {
 
         panel1 = new java.awt.Panel();
         startButton = new javax.swing.JButton();
-        newGameButton = new java.awt.Button();
+        newGameButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -110,6 +111,7 @@ public class View extends javax.swing.JFrame implements MessageHandler {
             .addGap(0, 800, Short.MAX_VALUE)
         );
 
+        startButton.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         startButton.setText("Start Game");
         startButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -117,8 +119,8 @@ public class View extends javax.swing.JFrame implements MessageHandler {
             }
         });
 
-        newGameButton.setLabel("button1");
-        newGameButton.setName("New Game"); // NOI18N
+        newGameButton.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        newGameButton.setText("New Game");
         newGameButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 newGameButtonActionPerformed(evt);
@@ -133,23 +135,34 @@ public class View extends javax.swing.JFrame implements MessageHandler {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(startButton)
-                .addGap(110, 110, 110)
-                .addComponent(newGameButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(122, 122, 122)
+                .addComponent(newGameButton))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 15, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(startButton, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(newGameButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 6, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(startButton)
+                    .addComponent(newGameButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+//
+//    protected void paintComponent(Graphics g) {
+//        super.paintComponents(g);
+//        g.setColor(Color.BLACK);
+//        //draw grid lines
+//        for (int i = 0; i < 7; i++) {
+//            g.drawLine(i, (100 * i + 100), 800, (100 * i + 100));
+//        }
+//        for (int i = 0; i < 7; i++) {
+//            g.drawLine((100 * i + 100), i, (100 * i + 100), 800);
+//        }
+//    }
 
     private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
         // TODO add your handling code here:
@@ -164,7 +177,6 @@ public class View extends javax.swing.JFrame implements MessageHandler {
         for (int i = 0; i < 7; i++) {
             g.drawLine((100 * i + 100), i, (100 * i + 100), 800);
         }
-
         //place starting 4 pieces
         g.fillOval((4 * 100) + 15, (3 * 100) + 15, 70, 70);
         g.fillOval((3 * 100) + 15, (4 * 100) + 15, 70, 70);
@@ -191,7 +203,19 @@ public class View extends javax.swing.JFrame implements MessageHandler {
 
     private void newGameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newGameButtonActionPerformed
         // TODO add your handling code here:
-        this.mvcMessaging.notify("newGame",this);
+        this.mvcMessaging.notify("newGame", this);
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setColor(Color.black);
+        //place starting 4 pieces
+        g.fillOval((4 * 100) + 15, (3 * 100) + 15, 70, 70);
+        g.fillOval((3 * 100) + 15, (4 * 100) + 15, 70, 70);
+        g.setColor(Color.white);
+        g.fillOval((4 * 100) + 15, (4 * 100) + 15, 70, 70);
+        g.fillOval((3 * 100) + 15, (3 * 100) + 15, 70, 70);
+
+        //reset
+        //panel1.repaint();
+
     }//GEN-LAST:event_newGameButtonActionPerformed
 
     /**
@@ -199,10 +223,9 @@ public class View extends javax.swing.JFrame implements MessageHandler {
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private java.awt.Button newGameButton;
+    private javax.swing.JButton newGameButton;
     private java.awt.Panel panel1;
     private javax.swing.JButton startButton;
     // End of variables declaration//GEN-END:variables
-    
-    
+
 }
