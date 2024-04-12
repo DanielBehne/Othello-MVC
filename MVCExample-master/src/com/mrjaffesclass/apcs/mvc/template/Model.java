@@ -16,7 +16,7 @@ public class Model implements MessageHandler {
     // Model's data variables
     private final String[][] board;
     private boolean isBlackMove = true;
-    private boolean gameOver = false;
+    //private boolean gameOver = false;
 
     /**
      * Model constructor: Create the data representation of the program
@@ -53,8 +53,9 @@ public class Model implements MessageHandler {
         } else {
             System.out.println("MSG: received by model: " + messageName + " | No data sent");
         }
+        boolean isBoardFull = boardFull(board);
 
-        if (messageName.equals("playerMove") && this.gameOver == false) {
+        if (messageName.equals("playerMove") && !isBoardFull) {
             String position = (String) messagePayload;
             Integer row = new Integer(position.substring(0, 1));
             Integer col = new Integer(position.substring(1, 2));
@@ -77,6 +78,18 @@ public class Model implements MessageHandler {
                 int blackCount = blackPieces(board);
                 int whiteCount = whitePieces(board);
 
+                if (isBoardFull) {
+                    if (blackCount > whiteCount) {
+                        this.mvcMessaging.notify("blackWin", this);
+                    }
+                    if (blackCount < whiteCount) {
+                        this.mvcMessaging.notify("whiteWin", this);
+                    } else {
+                        this.mvcMessaging.notify("gameTie", this);
+                    }
+                    
+                }
+
                 this.mvcMessaging.notify("boardChanged", this.board);
                 this.mvcMessaging.notify("blackPieces", blackCount);
                 this.mvcMessaging.notify("whitePieces", whiteCount);
@@ -84,25 +97,23 @@ public class Model implements MessageHandler {
 
         }
 
-        if (messageName.equals("newGame")) {
-            for (int w = 0; w < board.length; w++) {
-                for (int i = 0; i < board[0].length; i++) {
-                    this.board[w][i] = "";
-                }
-            }
-            this.board[4][3] = "B";
-            this.board[3][4] = "B";
-            this.board[3][3] = "W";
-            this.board[4][4] = "W";
-
-            isBlackMove = true;
-        }
+//        if (messageName.equals("newGame")) {
+//            for (int w = 0; w < board.length; w++) {
+//                for (int i = 0; i < board[0].length; i++) {
+//                    this.board[w][i] = "";
+//                }
+//            }
+//            this.board[4][3] = "B";
+//            this.board[3][4] = "B";
+//            this.board[3][3] = "W";
+//            this.board[4][4] = "W";
+//
+//            isBlackMove = true;
+//        }
 
     }
 
     public boolean legalMove(int row, int col, String[][] board, String playerColor) {
-        //boolean legal = false;
-
         int[][] vectors = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
 
         if (!board[row][col].equals("")) {
@@ -203,6 +214,7 @@ public class Model implements MessageHandler {
         }
         return blackCount;
     }
+
     public int whitePieces(String[][] board) {
         int whiteCount = 0;
         for (int r = 0; r < board.length; r++) {
@@ -215,4 +227,19 @@ public class Model implements MessageHandler {
         return whiteCount;
     }
 
+    public boolean boardFull(String[][] board) {
+        int count = 0;
+        for (int r = 0; r < board.length; r++) {
+            for (int c = 0; c < board[0].length; c++) {
+                if (board[r][c].equals("")) {
+                    count++;
+                }
+            }
+
+        }
+        if (count == 0) {
+            return true;
+        }
+        return false;
+    }
 }
