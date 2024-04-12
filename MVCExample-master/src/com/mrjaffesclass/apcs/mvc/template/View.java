@@ -48,6 +48,9 @@ public class View extends javax.swing.JFrame implements MessageHandler {
         mvcMessaging.subscribe("blackWin", this);
         mvcMessaging.subscribe("whiteWin", this);
         mvcMessaging.subscribe("gameTie", this);
+        mvcMessaging.subscribe("blackMove", this);
+        mvcMessaging.subscribe("whiteMove", this);
+
     }
 
     @Override
@@ -56,6 +59,19 @@ public class View extends javax.swing.JFrame implements MessageHandler {
             System.out.println("MSG: received by view: " + messageName + " | " + messagePayload.toString());
         } else {
             System.out.println("MSG: received by view: " + messageName + " | No data sent");
+        }
+        if (messageName.equals("blackWin")) {
+            gameLabel.setText("BLACK WINS!!!");
+        }
+        if (messageName.equals("whiteWin")) {
+            gameLabel.setText("WHITE WINS!!!");
+        }
+        if (messageName.equals("gameTie")) {
+            gameLabel.setText("GAME TIED!");
+        } else if (messageName.equals("blackMove")) {
+            gameLabel.setText("Black Move");
+        } else if (messageName.equals("whiteMove")) {
+            gameLabel.setText("White Move");
         }
 
         if (messageName.equals("boardChanged")) {
@@ -89,15 +105,7 @@ public class View extends javax.swing.JFrame implements MessageHandler {
             String w = messagePayload.toString();
             whiteNum.setText(w);
         }
-        if (messageName.equals("blackWin")) {
-            gameLabel.setText("BLACK WINS!!!");
-        }
-        if (messageName.equals("whiteWin")) {
-            gameLabel.setText("WHITE WINS!!!");
-        }
-        if (messageName.equals("gameTie")) {
-            gameLabel.setText("GAME TIED!");
-        }
+
     }
 
     /**
@@ -150,7 +158,7 @@ public class View extends javax.swing.JFrame implements MessageHandler {
         whiteLabel.setText("White:");
 
         gameLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        gameLabel.setText("Othello");
+        gameLabel.setText("Black Move");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -168,7 +176,7 @@ public class View extends javax.swing.JFrame implements MessageHandler {
                 .addComponent(whiteLabel)
                 .addGap(18, 18, 18)
                 .addComponent(whiteNum)
-                .addGap(135, 135, 135)
+                .addGap(149, 149, 149)
                 .addComponent(gameLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(startButton)
@@ -177,21 +185,16 @@ public class View extends javax.swing.JFrame implements MessageHandler {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(startButton, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(blackLabel)
-                                .addComponent(blackNum)
-                                .addComponent(whiteLabel)
-                                .addComponent(whiteNum)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(gameLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(startButton, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(blackLabel)
+                        .addComponent(blackNum)
+                        .addComponent(whiteLabel)
+                        .addComponent(whiteNum)
+                        .addComponent(gameLabel)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 

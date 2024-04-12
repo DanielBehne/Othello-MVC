@@ -87,12 +87,25 @@ public class Model implements MessageHandler {
                     } else {
                         this.mvcMessaging.notify("gameTie", this);
                     }
-                    
+
+                }
+                if (blackCount == 0) {
+                    this.mvcMessaging.notify("whiteWin", this);
+
+                }
+                if (whiteCount == 0) {
+                    this.mvcMessaging.notify("blackWin", this);
                 }
 
                 this.mvcMessaging.notify("boardChanged", this.board);
                 this.mvcMessaging.notify("blackPieces", blackCount);
                 this.mvcMessaging.notify("whitePieces", whiteCount);
+            }
+            if (isBlackMove) {
+                this.mvcMessaging.notify("blackMove", this);
+            }
+            if (!isBlackMove) {
+                this.mvcMessaging.notify("whiteMove", this);
             }
 
         }
@@ -110,7 +123,6 @@ public class Model implements MessageHandler {
 //
 //            isBlackMove = true;
 //        }
-
     }
 
     public boolean legalMove(int row, int col, String[][] board, String playerColor) {
