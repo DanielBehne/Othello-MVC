@@ -103,7 +103,7 @@ public class View extends javax.swing.JFrame implements MessageHandler {
 
         if (messageName.equals("whitePieces")) {
             String w = messagePayload.toString();
-            whiteNum.setText(w);
+            whiteNum2.setText(w);
         }
 
     }
@@ -122,8 +122,8 @@ public class View extends javax.swing.JFrame implements MessageHandler {
         blackLabel = new javax.swing.JLabel();
         blackNum = new javax.swing.JLabel();
         whiteLabel = new javax.swing.JLabel();
-        whiteNum = new javax.swing.JLabel();
         gameLabel = new javax.swing.JLabel();
+        whiteNum2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -157,8 +157,8 @@ public class View extends javax.swing.JFrame implements MessageHandler {
 
         whiteLabel.setText("White:");
 
-        gameLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        gameLabel.setText("Black Move");
+        gameLabel.setFont(new java.awt.Font("Yu Gothic UI", 1, 24)); // NOI18N
+        gameLabel.setText(" ");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -170,30 +170,34 @@ public class View extends javax.swing.JFrame implements MessageHandler {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(blackLabel)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(blackNum)
-                .addGap(114, 114, 114)
+                .addGap(99, 99, 99)
                 .addComponent(whiteLabel)
-                .addGap(18, 18, 18)
-                .addComponent(whiteNum)
-                .addGap(149, 149, 149)
-                .addComponent(gameLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(whiteNum2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(gameLabel)
+                .addGap(49, 49, 49)
                 .addComponent(startButton)
                 .addGap(38, 38, 38))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(startButton, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(blackLabel)
-                        .addComponent(blackNum)
-                        .addComponent(whiteLabel)
-                        .addComponent(whiteNum)
-                        .addComponent(gameLabel)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(21, 22, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(blackLabel)
+                            .addComponent(whiteLabel)
+                            .addComponent(blackNum)
+                            .addComponent(whiteNum2, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(startButton)
+                            .addComponent(gameLabel))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -215,6 +219,8 @@ public class View extends javax.swing.JFrame implements MessageHandler {
 
     private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
         // TODO add your handling code here:
+        gameLabel.setText("Black Move");
+
         Graphics2D g2 = (Graphics2D) g;
         g2.setStroke(new BasicStroke(3));
         g2.setColor(Color.black);
@@ -243,11 +249,7 @@ public class View extends javax.swing.JFrame implements MessageHandler {
         String placeY = String.valueOf(y);
         String place = placeX + placeY;
         this.mvcMessaging.notify("playerMove", place);
-
-        //code to place piece needs to move to messageHandler
-//        Graphics2D g2 = (Graphics2D) g;
-//        g2.setColor(Color.black);
-//        g.fillOval((x * 100) + 15, (y * 100) + 15, 70, 70);
+        this.mvcMessaging.notify("checkState");
     }//GEN-LAST:event_onClick
 
     /**
@@ -261,7 +263,7 @@ public class View extends javax.swing.JFrame implements MessageHandler {
     private java.awt.Panel panel1;
     private javax.swing.JButton startButton;
     private javax.swing.JLabel whiteLabel;
-    private javax.swing.JLabel whiteNum;
+    private javax.swing.JLabel whiteNum2;
     // End of variables declaration//GEN-END:variables
 
 }

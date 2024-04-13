@@ -44,6 +44,7 @@ public class Model implements MessageHandler {
     public void init() {
         mvcMessaging.subscribe("playerMove", this);
         mvcMessaging.subscribe("newGame", this);
+        mvcMessaging.subscribe("checkState", this);
     }
 
     @Override
@@ -89,24 +90,32 @@ public class Model implements MessageHandler {
                     }
 
                 }
-                if (blackCount == 0) {
-                    this.mvcMessaging.notify("whiteWin", this);
-
-                }
-                if (whiteCount == 0) {
-                    this.mvcMessaging.notify("blackWin", this);
-                }
 
                 this.mvcMessaging.notify("boardChanged", this.board);
                 this.mvcMessaging.notify("blackPieces", blackCount);
                 this.mvcMessaging.notify("whitePieces", whiteCount);
             }
+
             if (isBlackMove) {
                 this.mvcMessaging.notify("blackMove", this);
             }
             if (!isBlackMove) {
                 this.mvcMessaging.notify("whiteMove", this);
             }
+
+        }
+
+        if (messageName.equals("checkState")) {
+            int blackCount1 = blackPieces(board);
+            int whiteCount1 = whitePieces(board);
+            if (blackCount1 == 0) {
+                this.mvcMessaging.notify("whiteWin", this);
+            }
+            if (whiteCount1 == 0) {
+                this.mvcMessaging.notify("blackWin", this);
+            }
+            this.mvcMessaging.notify("blackPieces", blackCount1);
+            this.mvcMessaging.notify("whitePieces", whiteCount1);
 
         }
 
