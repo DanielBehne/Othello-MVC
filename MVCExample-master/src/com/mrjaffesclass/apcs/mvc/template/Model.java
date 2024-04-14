@@ -79,18 +79,17 @@ public class Model implements MessageHandler {
                 int blackCount = blackPieces(board);
                 int whiteCount = whitePieces(board);
 
-                if (isBoardFull) {
-                    if (blackCount > whiteCount) {
-                        this.mvcMessaging.notify("blackWin", this);
-                    }
-                    if (blackCount < whiteCount) {
-                        this.mvcMessaging.notify("whiteWin", this);
-                    } else {
-                        this.mvcMessaging.notify("gameTie", this);
-                    }
-
-                }
-
+//                if (isBoardFull) {
+//                    if (blackCount > whiteCount) {
+//                        this.mvcMessaging.notify("blackWin", this);
+//                    }
+//                    if (blackCount < whiteCount) {
+//                        this.mvcMessaging.notify("whiteWin", this);
+//                    } else {
+//                        this.mvcMessaging.notify("gameTie", this);
+//                    }
+//
+//                }
                 this.mvcMessaging.notify("boardChanged", this.board);
                 this.mvcMessaging.notify("blackPieces", blackCount);
                 this.mvcMessaging.notify("whitePieces", whiteCount);
@@ -108,6 +107,18 @@ public class Model implements MessageHandler {
         if (messageName.equals("checkState")) {
             int blackCount1 = blackPieces(board);
             int whiteCount1 = whitePieces(board);
+            if (isBoardFull) {
+                if (blackCount1 > whiteCount1) {
+                    this.mvcMessaging.notify("blackWin", this);
+                }
+                if (blackCount1 < whiteCount1) {
+                    this.mvcMessaging.notify("whiteWin", this);
+                } 
+                if (blackCount1 == whiteCount1) {
+                    this.mvcMessaging.notify("gameTie", this);
+                }
+            }
+            
             if (blackCount1 == 0) {
                 this.mvcMessaging.notify("whiteWin", this);
             }
@@ -118,20 +129,6 @@ public class Model implements MessageHandler {
             this.mvcMessaging.notify("whitePieces", whiteCount1);
 
         }
-
-//        if (messageName.equals("newGame")) {
-//            for (int w = 0; w < board.length; w++) {
-//                for (int i = 0; i < board[0].length; i++) {
-//                    this.board[w][i] = "";
-//                }
-//            }
-//            this.board[4][3] = "B";
-//            this.board[3][4] = "B";
-//            this.board[3][3] = "W";
-//            this.board[4][4] = "W";
-//
-//            isBlackMove = true;
-//        }
     }
 
     public boolean legalMove(int row, int col, String[][] board, String playerColor) {

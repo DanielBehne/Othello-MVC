@@ -204,18 +204,6 @@ public class View extends javax.swing.JFrame implements MessageHandler {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-//
-//    protected void paintComponent(Graphics g) {
-//        super.paintComponents(g);
-//        g.setColor(Color.BLACK);
-//        //draw grid lines
-//        for (int i = 0; i < 7; i++) {
-//            g.drawLine(i, (100 * i + 100), 800, (100 * i + 100));
-//        }
-//        for (int i = 0; i < 7; i++) {
-//            g.drawLine((100 * i + 100), i, (100 * i + 100), 800);
-//        }
-//    }
 
     private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
         // TODO add your handling code here:
