@@ -32,7 +32,6 @@ public class View extends javax.swing.JFrame implements MessageHandler {
         mvcMessaging = messages;   // Save the calling controller instance
         initComponents();           // Create and init the GUI components
         g = panel1.getGraphics();
-        //panel1.paintComponents(g);
 
     }
 

@@ -16,7 +16,6 @@ public class Model implements MessageHandler {
     // Model's data variables
     private final String[][] board;
     private boolean isBlackMove = true;
-    //private boolean gameOver = false;
 
     /**
      * Model constructor: Create the data representation of the program
@@ -79,17 +78,6 @@ public class Model implements MessageHandler {
                 int blackCount = blackPieces(board);
                 int whiteCount = whitePieces(board);
 
-//                if (isBoardFull) {
-//                    if (blackCount > whiteCount) {
-//                        this.mvcMessaging.notify("blackWin", this);
-//                    }
-//                    if (blackCount < whiteCount) {
-//                        this.mvcMessaging.notify("whiteWin", this);
-//                    } else {
-//                        this.mvcMessaging.notify("gameTie", this);
-//                    }
-//
-//                }
                 this.mvcMessaging.notify("boardChanged", this.board);
                 this.mvcMessaging.notify("blackPieces", blackCount);
                 this.mvcMessaging.notify("whitePieces", whiteCount);
@@ -154,8 +142,6 @@ public class Model implements MessageHandler {
                 testY -= y;
                 while (testX != row || testY != col) {
                     if (!board[testX][testY].equals(playerColor) && !board[testX][testY].equals("")) {
-                        //source of error
-                        //board[testX][testY] = playerColor;
                         return true;
                     }
                     testX -= x;
